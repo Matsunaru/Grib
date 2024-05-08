@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 using namespace std;
 
 
@@ -32,6 +33,7 @@ int main()
 	uint8_t byte2;
 	uint8_t byte3;
 	uint8_t byte4;
+	char byte_char;
 
 
 	//Szukamy "GRIB" w pliku
@@ -160,6 +162,93 @@ int main()
 		nameidprocess = "404 not found";
 	}
 	outputBuffer << "process ID number: " << nameidprocess << "\n";
+
+	grib.seekg(start_section_1 + 6);
+	uint32_t GridIdentification = 0;
+	grib >> tmp;
+	GridIdentification |= (static_cast<uint32_t>(tmp));
+	outputBuffer << "Grid Identification: " << GridIdentification << "\n";
+
+	grib.seekg(start_section_1 + 7);
+
+	uint16_t GDSandBMS = 0;
+
+	char byte_chars[2];
+	grib.read(byte_chars, 2);
+
+	GDSandBMS = static_cast<uint16_t>(byte_chars[0]) << 8 | static_cast<uint16_t>(byte_chars[1]);
+
+	bool isGDSIncluded = (GDSandBMS & 0b00000001) != 0;
+	bool isBMSIncluded = (GDSandBMS & 0b00000010) != 0;
+
+	string GDS, BMS;
+
+	if (isGDSIncluded)
+	{
+		GDS = "GDS Included";
+	}
+	else
+	{
+		GDS = "GDS Omitted";
+	}
+
+	if (isBMSIncluded)
+	{
+		BMS = "BMS Included";
+	}
+	else
+	{
+		BMS = "BMS Omitted";
+	}
+
+	outputBuffer << "GDS and BMS: " << GDS << " " << BMS << "\n";
+
+
+	grib.seekg(start_section_1 + 8);
+	uint32_t Unitparameters = 0;
+	grib >> tmp;
+	Unitparameters |= (static_cast<uint32_t>(tmp));
+	outputBuffer << "Unit parameters: " << Unitparameters << "\n";
+
+	grib.seekg(start_section_1 + 9);
+	uint32_t Indicatoroftypeoflevelorlayer = 0;
+	grib >> tmp;
+	Indicatoroftypeoflevelorlayer |= (static_cast<uint32_t>(tmp));
+	outputBuffer << "Indicator of type of level or layer: " << Indicatoroftypeoflevelorlayer << "\n";
+
+	grib.seekg(start_section_1 + 10);
+	uint32_t Heightpressure = 0;
+	grib >> tmp;
+	Heightpressure |= (static_cast<uint32_t>(tmp));
+	outputBuffer << "Height, pressure, etc. of the level or layer: " << Heightpressure << "\n";
+
+	grib.seekg(start_section_1 + 12);
+
+	// Read Year
+	grib.read(&byte_char, 1);
+	int Year = int(byte_char);
+
+	// Read Month
+	grib.read(&byte_char, 1);
+	int Month = int(byte_char);
+
+	// Read Day
+	grib.read(&byte_char, 1);
+	int Day = int(byte_char);
+
+	// Read Hour
+	grib.read(&byte_char, 1);
+	int hours = int(byte_char);
+
+	// Read Minute
+	grib.read(&byte_char, 1);
+	int minute = int(byte_char);
+
+	// Output date and time
+	outputBuffer << "YY/MM/DD|HH:MM: " << Year << "/" << Month << "/" << Day << "|" << hours << ":" << minute << "\n";
+
+
+
 
 
 
