@@ -1,0 +1,59 @@
+Coding info: HUIA85
+
+==========================
+== General Message Info ==
+==========================
+
+Znalazlem GRIB na pozycji: 40
+Znalazlem 7777 na pozycji: 4578
+Distance between end of GRIB and start of 7777: 4538
+Dlugosc wiadomosci: 4538
+==========================
+== Section 1 Data ==
+==========================
+
+Dlugosc sekcji 1 : 28
+Parameter table Version: 2
+Identification of Centre: US National Weather Service - NCEP(WMC)
+process ID number: Analysis from GFS (Global Forecast System)
+Grid Identification: 37
+GDS and BMS: GDS Included BMS Omitted
+Unit parameters: 33
+Indicator of type of level or layer: 100
+Height, pressure, etc. of the level or layer: 382
+YY/MM/DD|HH:MM: 15/3/10|0:0
+Time unit: 1
+P1 - Period of time: 0
+P2 - Period of time: 0
+Time range indicator: 10
+Numbers for last row: 0
+Number missing from averages or accumulation: 0
+Reference century: 21
+Identification of sub Center: 0
+Decimal Scale factor: 1
+==========================
+== Section 2 Data ==
+==========================
+
+Dlugosc sekcji 2 : 178
+Number of Vertical Coordinates: 0
+Octet number: 33
+Data representation type: 0
+Numbers of points along a latitude circle: 65535
+Numbers of points along a longitude meridian: 73
+Latitude: 0 degrees
+Longitude: 8.652° W
+Resolution and component flags:
+Direction increments given: No
+Earth shape: Spherical
+Components resolved relative to grid: No
+Latitude of last grid point: 90 degrees
+Longitude of last grid point: 60 degrees
+Longitudinal Direction Increment: -1
+Latitudinal Direction Increment: 1250
+==========================
+== Section 4 Data ==
+==========================
+
+Dlugosc sekcji 4 : 6979217
+Binary Scale Factor: -90
