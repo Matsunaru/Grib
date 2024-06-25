@@ -17,7 +17,7 @@ Parameter table Version: 2
 Identification of Centre: US National Weather Service - NCEP(WMC)
 process ID number: Analysis from GFS (Global Forecast System)
 Grid Identification: 37
-GDS and BMS: GDS Included BMS Omitted
+GDS and BMS: GDS Included BMS Omitted  reserved
 Unit parameters: 33
 Indicator of type of level or layer: 100
 Height, pressure, etc. of the level or layer: 382
@@ -42,7 +42,7 @@ Data representation type: 0
 Numbers of points along a latitude circle: 65535
 Numbers of points along a longitude meridian: 73
 Latitude: 0 degrees
-Longitude: 8.652° W
+Longitude: 30° W
 Resolution and component flags:
 Direction increments given: No
 Earth shape: Spherical
@@ -57,4 +57,4 @@ Latitudinal Direction Increment: 1250
 
 Dlugosc sekcji 3 : 4320
 Flag to decode: 2
-Binary Scale Factor: : 0
+Binary Scale Factor: 0
