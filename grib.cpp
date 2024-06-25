@@ -236,7 +236,12 @@ int main()
 	int minute = int(byte_char);
 
 	// Output date and time
-	outputBuffer << "YY/MM/DD|HH:MM: " << Year << "/" << Month << "/" << Day << "|" << hours << ":" << minute << "\n";
+	outputBuffer << "YY/MM/DD|HH:MM: "
+	<< Year << "/"
+	<< Month << "/"
+	<< Day << "|"
+	<< (hours < 10 ? "0" : "") << hours << ":"
+	<< (minute < 10 ? "0" : "") << minute << "\n";
 
 	grib.seekg(start_section_1 + 17);
 	grib.read(&byte_char, 1);

@@ -21,7 +21,7 @@ GDS and BMS: GDS Included BMS Omitted
 Unit parameters: 33
 Indicator of type of level or layer: 100
 Height, pressure, etc. of the level or layer: 382
-YY/MM/DD|HH:MM: 15/3/10|0:0
+YY/MM/DD|HH:MM: 15/3/10|00:00
 Time unit: 1
 P1 - Period of time: 0
 P2 - Period of time: 0
@@ -42,7 +42,7 @@ Data representation type: 0
 Numbers of points along a latitude circle: 65535
 Numbers of points along a longitude meridian: 73
 Latitude: 0 degrees
-Longitude: 8.652° W
+Longitude: 8.652ï¿½ W
 Resolution and component flags:
 Direction increments given: No
 Earth shape: Spherical
