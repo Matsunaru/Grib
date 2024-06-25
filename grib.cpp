@@ -439,39 +439,33 @@ int main()
 	outputBuffer.clear();
 
 
-	grib.seekg(start_section_2 + section_2_length + 3);
+	// Przesuń kursor na koniec sekcji 3
+	grib.seekg(start_section_2 + section_2_length);
 
+	uint32_t start_section_3 = grib.tellg();
+
+	//Wczytujemy kolejno trzy bajty i umieszczamy je w 4 bajtowej zmiennej
 	uint32_t section_3_length = 0;
 	for (int i = 0; i < 3; ++i)
 	{
 		uint8_t tmp;
 		grib >> tmp;
 
+		//Z odpowiednim binarnym przesunięciem o wielokrotnosc 8, co daje nam kolejno 16, 8 , 0;
 		section_3_length |= (static_cast<uint32_t>(tmp) << (8 * (2 - i)));
 	}
+	outputBuffer << "Dlugosc sekcji 3 : " << section_3_length << "\n";
 
-	grib.seekg(start_section_2 + section_2_length + section_3_length + 3);
+	grib.read(&byte_char, 1);
+	int Flag_to_decode = int(byte_char);
+	outputBuffer << "Flag to decode: " << Flag_to_decode << "\n";
 
-	uint32_t start_section_4 = grib.tellg();
-
-	uint32_t section_4_length = 0;
-	for (int i = 0; i < 3; ++i)
-	{
-		uint8_t tmp;
-		grib >> tmp;
-
-		
-		section_4_length |= (static_cast<uint32_t>(tmp) << (8 * (2 - i)));
-	}
-	outputBuffer << "Dlugosc sekcji 4 : " << section_4_length << "\n";
-
-	grib.seekg(start_section_4 + 4);
 	grib.read(&byte_char, 1);
 	int BinaryScaleFactor = int(byte_char);
-	outputBuffer << "Binary Scale Factor: " << BinaryScaleFactor << "\n";
+	outputBuffer << "Binary Scale Factor: : " << BinaryScaleFactor << "\n";
 
 	outputFile << "==========================\n";
-	outputFile << "== Section 4 Data ==\n";
+	outputFile << "== Section 3 Data ==\n";
 	outputFile << "==========================\n\n";
 
 	outputFile << outputBuffer.str();

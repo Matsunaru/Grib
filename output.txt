@@ -42,7 +42,7 @@ Data representation type: 0
 Numbers of points along a latitude circle: 65535
 Numbers of points along a longitude meridian: 73
 Latitude: 0 degrees
-Longitude: 8.652� W
+Longitude: 8.652° W
 Resolution and component flags:
 Direction increments given: No
 Earth shape: Spherical
@@ -52,8 +52,9 @@ Longitude of last grid point: 60 degrees
 Longitudinal Direction Increment: -1
 Latitudinal Direction Increment: 1250
 ==========================
-== Section 4 Data ==
+== Section 3 Data ==
 ==========================
 
-Dlugosc sekcji 4 : 6979217
-Binary Scale Factor: -90
+Dlugosc sekcji 3 : 4320
+Flag to decode: 2
+Binary Scale Factor: : 0
