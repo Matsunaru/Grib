@@ -292,7 +292,7 @@ int main()
             (static_cast<int>(static_cast<unsigned char>(bytes[1])));
 
         if (point_value == 0) {
-            --i;  // Powtórz odczyt dla tego samego wiersza
+            --i;  // Repeat reading for the same row
         }
         else {
             row_points[i] = point_value;
