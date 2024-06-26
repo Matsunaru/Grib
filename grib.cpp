@@ -112,7 +112,6 @@ int main()
     outputBuffer << "Section 1 length: " << section_1_length << "\n";
 
     
-
     uint32_t ParametertableVersion = 0;
     grib.read(reinterpret_cast<char*>(&byte), 1);
     ParametertableVersion |= (static_cast<uint32_t>(byte));
@@ -168,18 +167,16 @@ int main()
 
     grib.seekg(start_section_1 + 8);
     uint32_t Unitparameters = 0;
-    grib.read(reinterpret_cast<char*>(&byte), 1);
-    Unitparameters |= (static_cast<uint32_t>(byte));
+    grib.read(&byte_char, 1);
+    Unitparameters |= (static_cast<uint32_t>(byte_char));
     outputBuffer << "Unit parameters: " << Unitparameters << "\n";
 
-    grib.seekg(start_section_1 + 9);
     uint32_t Indicatoroftypeoflevelorlayer = 0;
     grib.read(reinterpret_cast<char*>(&byte), 1);
     Indicatoroftypeoflevelorlayer |= (static_cast<uint32_t>(byte));
     outputBuffer << "Indicator of type of level or layer: " << Indicatoroftypeoflevelorlayer << "\n";
 
     // Read height, pressure, etc. of the level or layer
-    grib.seekg(start_section_1 + 10);
     grib.read(&byte_char, 1);
     int firstByte = static_cast<unsigned char>(byte_char);
     grib.read(&byte_char, 1);
@@ -187,7 +184,6 @@ int main()
     int Heightpressure = (firstByte << 8) | secondByte;
     outputBuffer << "Height, pressure, etc. of the level or layer: " << Heightpressure << "\n";
 
-    grib.seekg(start_section_1 + 12);
 
     // Read Year
     grib.read(&byte_char, 1);
@@ -217,27 +213,22 @@ int main()
         << setw(2) << setfill('0') << hours << ":"
         << setw(2) << setfill('0') << minute << "\n";
 
-    grib.seekg(start_section_1 + 17);
     grib.read(&byte_char, 1);
     int TimeUnit = int(byte_char);
     outputBuffer << "Time unit: " << TimeUnit << "\n";
 
-    grib.seekg(start_section_1 + 18);
     grib.read(&byte_char, 1);
     int P1 = int(byte_char);
     outputBuffer << "P1 - Period of time: " << P1 << "\n";
 
-    grib.seekg(start_section_1 + 19);
     grib.read(&byte_char, 1);
     int P2 = int(byte_char);
     outputBuffer << "P2 - Period of time: " << P2 << "\n";
 
-    grib.seekg(start_section_1 + 20);
     grib.read(&byte_char, 1);
     int TimeRange = int(byte_char);
     outputBuffer << "Time range indicator: " << TimeRange << "\n";
 
-    grib.seekg(start_section_1 + 21);
     grib.read(&byte_char, 1);
     int LastRow = int(byte_char);
     outputBuffer << "Numbers for last row: " << LastRow << "\n";
@@ -247,17 +238,14 @@ int main()
     int MissingAverages = int(byte_char);
     outputBuffer << "Number missing from averages or accumulation: " << MissingAverages << "\n";
 
-    grib.seekg(start_section_1 + 24);
     grib.read(&byte_char, 1);
     int Referencecentury = int(byte_char);
     outputBuffer << "Reference century: " << Referencecentury << "\n";
 
-    grib.seekg(start_section_1 + 25);
     grib.read(&byte_char, 1);
     int subCenter = int(byte_char);
     outputBuffer << "Identification of sub Center: " << subCenter << "\n";
 
-    grib.seekg(start_section_1 + 26);
     grib.read(&byte_char, 1);
     int DecimalScalefactor = int(byte_char);
     grib.read(&byte_char, 1);
@@ -284,17 +272,15 @@ int main()
     }
     outputBuffer << "Section 2 length: " << section_2_length << "\n";
 
-    grib.seekg(start_section_2 + 3);
     grib.read(&byte_char, 1);
     int NumberofVerticalCoordinates = int(byte_char);
     outputBuffer << "Number of Vertical Coordinates: " << NumberofVerticalCoordinates << "\n";
 
-    grib.seekg(start_section_2 + 4);
     grib.read(&byte_char, 1);
     int Octetnumber = int(byte_char);
     outputBuffer << "Octet number: " << Octetnumber << "\n";
 
-    grib.seekg(start_section_2 + 5);
+
     grib.read(&byte_char, 1);
     int Datarepresentationtype = int(byte_char);
     outputBuffer << "Data representation type: " << Datarepresentationtype << "\n";
