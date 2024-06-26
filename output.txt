@@ -17,7 +17,7 @@ Parameter table Version: 2
 Identification of Centre: US National Weather Service - NCEP(WMC)
 Process ID number: Analysis from GFS (Global Forecast System)
 Grid Identification: 37
-GDS and BMS: GDS Included BMS Omitted  reserved
+GDS and BMS: GDS Omitted BMS Omitted  reserved
 Unit parameters: 33
 Indicator of type of level or layer: 100
 Height, pressure, etc. of the level or layer: 850
