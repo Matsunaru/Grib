@@ -4,23 +4,23 @@ Coding info: HUIA85
 == General Message Info ==
 ==========================
 
-Znalazlem GRIB na pozycji: 40
-Znalazlem 7777 na pozycji: 4578
+Found GRIB at position: 40
+Found 7777 at position: 4578
 Distance between end of GRIB and start of 7777: 4538
-Dlugosc wiadomosci: 4538
+Message length: 4538
 ==========================
 == Section 1 Data ==
 ==========================
 
-Dlugosc sekcji 1 : 28
+Section 1 length: 28
 Parameter table Version: 2
 Identification of Centre: US National Weather Service - NCEP(WMC)
-process ID number: Analysis from GFS (Global Forecast System)
+Process ID number: Analysis from GFS (Global Forecast System)
 Grid Identification: 37
 GDS and BMS: GDS Included BMS Omitted  reserved
 Unit parameters: 33
 Indicator of type of level or layer: 100
-Height, pressure, etc. of the level or layer: 382
+Height, pressure, etc. of the level or layer: 850
 YY/MM/DD|HH:MM: 15/3/10|00:00
 Time unit: 1
 P1 - Period of time: 0
@@ -35,26 +35,102 @@ Decimal Scale factor: 1
 == Section 2 Data ==
 ==========================
 
-Dlugosc sekcji 2 : 178
+Section 2 length: 178
 Number of Vertical Coordinates: 0
 Octet number: 33
 Data representation type: 0
 Numbers of points along a latitude circle: 65535
 Numbers of points along a longitude meridian: 73
 Latitude: 0 degrees
-Longitude: 30° W
+Longitude: -30 degrees
 Resolution and component flags:
-Direction increments given: No
-Earth shape: Spherical
-Components resolved relative to grid: No
+Direction increments given: Direction increments not given
+Earth shape: Earth assumed spherical with radius = 6367.47 km
+Reserved (3-4): Reserved (set to 0)
+u- and v-components of vector quantities: u- and v-components of vector quantities resolved relative to easterly and northerly directions
+Reserved (6-8): Set to 1
 Latitude of last grid point: 90 degrees
 Longitude of last grid point: 60 degrees
-Longitudinal Direction Increment: -1
-Latitudinal Direction Increment: 1250
+Longitudinal Direction Increment: 65.535 degrees
+Latitudinal Direction Increment: 1.25 degrees
+Scanning mode flags: Points scan in +i and -j direction: (FORTRAN: (I,J))
+Row 1 Points: 73
+Row 2 Points: 73
+Row 3 Points: 73
+Row 4 Points: 73
+Row 5 Points: 73
+Row 6 Points: 73
+Row 7 Points: 73
+Row 8 Points: 73
+Row 9 Points: 72
+Row 10 Points: 72
+Row 11 Points: 72
+Row 12 Points: 71
+Row 13 Points: 71
+Row 14 Points: 71
+Row 15 Points: 70
+Row 16 Points: 70
+Row 17 Points: 69
+Row 18 Points: 69
+Row 19 Points: 68
+Row 20 Points: 67
+Row 21 Points: 67
+Row 22 Points: 66
+Row 23 Points: 65
+Row 24 Points: 65
+Row 25 Points: 64
+Row 26 Points: 63
+Row 27 Points: 62
+Row 28 Points: 61
+Row 29 Points: 60
+Row 30 Points: 60
+Row 31 Points: 59
+Row 32 Points: 58
+Row 33 Points: 57
+Row 34 Points: 56
+Row 35 Points: 55
+Row 36 Points: 54
+Row 37 Points: 52
+Row 38 Points: 51
+Row 39 Points: 50
+Row 40 Points: 49
+Row 41 Points: 48
+Row 42 Points: 47
+Row 43 Points: 45
+Row 44 Points: 44
+Row 45 Points: 43
+Row 46 Points: 42
+Row 47 Points: 40
+Row 48 Points: 39
+Row 49 Points: 38
+Row 50 Points: 36
+Row 51 Points: 35
+Row 52 Points: 33
+Row 53 Points: 32
+Row 54 Points: 30
+Row 55 Points: 29
+Row 56 Points: 28
+Row 57 Points: 26
+Row 58 Points: 25
+Row 59 Points: 23
+Row 60 Points: 22
+Row 61 Points: 20
+Row 62 Points: 19
+Row 63 Points: 17
+Row 64 Points: 16
+Row 65 Points: 14
+Row 66 Points: 12
+Row 67 Points: 11
+Row 68 Points: 9
+Row 69 Points: 8
+Row 70 Points: 6
+Row 71 Points: 5
+Row 72 Points: 3
+Row 73 Points: 2
 ==========================
 == Section 3 Data ==
 ==========================
 
-Dlugosc sekcji 3 : 4320
+Section 3 length: 4320
 Flag to decode: 2
 Binary Scale Factor: 0

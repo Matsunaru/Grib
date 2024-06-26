@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include <bitset>
+#include <vector>
 using namespace std;
 
 int main()
@@ -13,7 +14,7 @@ int main()
 
     if (!grib.is_open())
     {
-        cout << "Nie udalo sie otworzyc pliku!\n";
+        cout << "Failed to open the file!\n";
         return -1;
     }
 
@@ -21,7 +22,7 @@ int main()
 
     if (!outputFile.is_open())
     {
-        cout << "Nie udalo sie otworzyc pliku do zapisu!\n";
+        cout << "Failed to open the output file!\n";
         return -1;
     }
 
@@ -43,7 +44,7 @@ int main()
             grib.read(reinterpret_cast<char*>(&byte4), 1);
             if (byte2 == 'R' && byte3 == 'I' && byte4 == 'B')
             {
-                outputBuffer << "Znalazlem GRIB na pozycji: " << (uint32_t)grib.tellg() - 4 << "\n";
+                outputBuffer << "Found GRIB at position: " << (uint32_t)grib.tellg() - 4 << "\n";
                 start_section_0 = (uint32_t)grib.tellg() - 4;
                 break;
             }
@@ -63,7 +64,7 @@ int main()
             if (byte2 == '7' && byte3 == '7' && byte4 == '7')
             {
                 start_7777_pos = (uint32_t)grib.tellg() - 4;
-                outputBuffer << "Znalazlem 7777 na pozycji: " << (uint32_t)grib.tellg() << "\n";
+                outputBuffer << "Found 7777 at position: " << (uint32_t)grib.tellg() << "\n";
                 break;
             }
         }
@@ -83,7 +84,7 @@ int main()
         message_len |= (static_cast<uint32_t>(byte) << (8 * (2 - i)));
     }
 
-    outputBuffer << "Dlugosc wiadomosci: " << message_len << "\n";
+    outputBuffer << "Message length: " << message_len << "\n";
 
     // Skip one byte
     grib.read(reinterpret_cast<char*>(&byte), 1);
@@ -108,36 +109,34 @@ int main()
     outputBuffer.str("");
     outputBuffer.clear();
 
-    outputBuffer << "Dlugosc sekcji 1 : " << section_1_length << "\n";
+    outputBuffer << "Section 1 length: " << section_1_length << "\n";
 
-    grib.seekg(start_section_1 + 3);
+    
 
     uint32_t ParametertableVersion = 0;
     grib.read(reinterpret_cast<char*>(&byte), 1);
     ParametertableVersion |= (static_cast<uint32_t>(byte));
     outputBuffer << "Parameter table Version: " << ParametertableVersion << "\n";
 
-    grib.seekg(start_section_1 + 4);
+    
     uint32_t Centre = 0;
     grib.read(reinterpret_cast<char*>(&byte), 1);
     Centre |= (static_cast<uint32_t>(byte));
     string nameCentre = (Centre == 7) ? "US National Weather Service - NCEP(WMC)" : "404 not found";
     outputBuffer << "Identification of Centre: " << nameCentre << "\n";
 
-    grib.seekg(start_section_1 + 5);
+    
     uint32_t ProcessID = 0;
     grib.read(reinterpret_cast<char*>(&byte), 1);
     ProcessID |= (static_cast<uint32_t>(byte));
     string nameidprocess = (ProcessID == 81) ? "Analysis from GFS (Global Forecast System)" : "404 not found";
-    outputBuffer << "process ID number: " << nameidprocess << "\n";
+    outputBuffer << "Process ID number: " << nameidprocess << "\n";
 
-    grib.seekg(start_section_1 + 6);
     uint32_t GridIdentification = 0;
     grib.read(reinterpret_cast<char*>(&byte), 1);
     GridIdentification |= (static_cast<uint32_t>(byte));
     outputBuffer << "Grid Identification: " << GridIdentification << "\n";
 
-    grib.seekg(start_section_1 + 7);
     uint16_t GDSandBMS = 0;
     char byte_chars[2];
     grib.read(byte_chars, 2);
@@ -179,13 +178,14 @@ int main()
     Indicatoroftypeoflevelorlayer |= (static_cast<uint32_t>(byte));
     outputBuffer << "Indicator of type of level or layer: " << Indicatoroftypeoflevelorlayer << "\n";
 
+    // Read height, pressure, etc. of the level or layer
     grib.seekg(start_section_1 + 10);
     grib.read(&byte_char, 1);
-    int Heightpressure = int(byte_char);
+    int firstByte = static_cast<unsigned char>(byte_char);
     grib.read(&byte_char, 1);
-    int Highest = int(byte_char);
-
-    outputBuffer << "Height, pressure, etc. of the level or layer: " << Heightpressure << Highest << "\n";
+    int secondByte = static_cast<unsigned char>(byte_char);
+    int Heightpressure = (firstByte << 8) | secondByte;
+    outputBuffer << "Height, pressure, etc. of the level or layer: " << Heightpressure << "\n";
 
     grib.seekg(start_section_1 + 12);
 
@@ -269,7 +269,6 @@ int main()
     outputFile << "==========================\n\n";
 
     outputFile << outputBuffer.str();
-
     cout << outputBuffer.str();
     outputBuffer.str("");
     outputBuffer.clear();
@@ -283,7 +282,7 @@ int main()
         grib.read(reinterpret_cast<char*>(&byte), 1);
         section_2_length |= (static_cast<uint32_t>(byte) << (8 * (2 - i)));
     }
-    outputBuffer << "Dlugosc sekcji 2 : " << section_2_length << "\n";
+    outputBuffer << "Section 2 length: " << section_2_length << "\n";
 
     grib.seekg(start_section_2 + 3);
     grib.read(&byte_char, 1);
@@ -304,21 +303,18 @@ int main()
     char byte_charso[2];
     grib.read(byte_charso, 2);
     int numberOfPoints = static_cast<int>(static_cast<unsigned char>(byte_charso[0])) << 8 | static_cast<int>(static_cast<unsigned char>(byte_charso[1]));
-
     outputBuffer << "Numbers of points along a latitude circle: " << numberOfPoints << "\n";
 
     grib.seekg(start_section_2 + 8);
     char byte_chars2[2];
     grib.read(byte_chars2, 2);
     int numberOfPointsMeridian = static_cast<int>(static_cast<unsigned char>(byte_chars2[0])) << 8 | static_cast<int>(static_cast<unsigned char>(byte_chars2[1]));
-
     outputBuffer << "Numbers of points along a longitude meridian: " << numberOfPointsMeridian << "\n";
 
     grib.seekg(start_section_2 + 10);
     char byte_chars3[2];
     grib.read(byte_chars3, 2);
     int Latitude = static_cast<int>(static_cast<unsigned char>(byte_chars3[0])) << 8 | static_cast<int>(static_cast<unsigned char>(byte_chars3[1]));
-
     outputBuffer << "Latitude: " << Latitude << " degrees" << "\n";
 
     grib.seekg(start_section_2 + 13);
@@ -336,9 +332,11 @@ int main()
     // Convert millidegrees to degrees
     double Lo1_degrees = static_cast<double>(Lo1_millidegrees) / 1000.0;
 
+    if (isWestLongitude) {
+        Lo1_degrees = -Lo1_degrees;
+    }
     // Add longitude information to the buffer
-    outputBuffer << "Longitude: ";
-    outputBuffer << Lo1_degrees << (isWestLongitude ? "° W\n" : "° E\n");
+    outputBuffer << "Longitude: " << Lo1_degrees << " degrees\n";
 
     // Move to the position for resolution and component flags
     grib.seekg(start_section_2 + 16);
@@ -349,12 +347,16 @@ int main()
     bool direction_increments_given = (resolution_component_flags & 0b00000001) != 0;
     bool earth_oblate_spheroid = (resolution_component_flags & 0b00000010) != 0;
     bool u_v_components_relative_defined_grid = (resolution_component_flags & 0b00010000) != 0;
+    bool reserved_3_4 = (resolution_component_flags & 0b00001100) != 0;
+    bool reserved_6_8 = (resolution_component_flags & 0b11100000) != 0;
 
     // Add flag information to the buffer
     outputBuffer << "Resolution and component flags:\n";
-    outputBuffer << "Direction increments given: " << (direction_increments_given ? "Yes" : "No") << "\n";
-    outputBuffer << "Earth shape: " << (earth_oblate_spheroid ? "Oblate spheroid" : "Spherical") << "\n";
-    outputBuffer << "Components resolved relative to grid: " << (u_v_components_relative_defined_grid ? "Yes" : "No") << "\n";
+    outputBuffer << "Direction increments given: " << (direction_increments_given ? "Direction increments given" : "Direction increments not given") << "\n";
+    outputBuffer << "Earth shape: " << (earth_oblate_spheroid ? "Earth assumed oblate spheroid with size as determined by IAU in 1965: 6378.160 km, 6356.775 km, f = 1/297.0" : "Earth assumed spherical with radius = 6367.47 km") << "\n";
+    outputBuffer << "Reserved (3-4): " << (reserved_3_4 ? "Set to 1" : "Reserved (set to 0)") << "\n";
+    outputBuffer << "u- and v-components of vector quantities: " << (u_v_components_relative_defined_grid ? "u- and v-components of vector quantities resolved relative to the defined grid in the direction of increasing x and y (or i and j) coordinates respectively" : "u- and v-components of vector quantities resolved relative to easterly and northerly directions") << "\n";
+    outputBuffer << "Reserved (6-8): " << (reserved_6_8 ? "Set to 1" : "Reserved (set to 0)") << "\n";
 
     // Move to the position for latitude of last grid point
     grib.seekg(start_section_2 + 17);
@@ -388,16 +390,71 @@ int main()
 
     // Move to the position for longitudinal direction increment
     grib.seekg(start_section_2 + 23);
-    grib.read(&byte_char, 1);
-    int DirectionIncrement = int(byte_char);
-    outputBuffer << "Longitudinal Direction Increment: " << DirectionIncrement << "\n";
+
+    // Read two bytes
+    char byte_chars8[2];
+    grib.read(byte_chars8, 2);
+
+    // Convert two bytes to a 16-bit integer
+    int DirectionIncrement = (static_cast<int>(static_cast<unsigned char>(byte_chars8[0])) << 8) |
+        static_cast<int>(static_cast<unsigned char>(byte_chars8[1]));
+
+    // Convert value to degrees (dividing by 1000)
+    double DirectionIncrementDegrees = static_cast<double>(DirectionIncrement) / 1000.0;
+
+    // Add result to the buffer
+    outputBuffer << "Longitudinal Direction Increment: " << DirectionIncrementDegrees << " degrees\n";
 
     // Move to the position for latitudinal direction increment
     grib.seekg(start_section_2 + 25);
+
+    // Read two bytes
     char byte_chars9[2];
     grib.read(byte_chars9, 2);
-    int LatitudinalDirection = static_cast<int>(static_cast<unsigned char>(byte_chars9[0])) << 8 | static_cast<int>(static_cast<unsigned char>(byte_chars9[1]));
-    outputBuffer << "Latitudinal Direction Increment: " << LatitudinalDirection << "\n";
+
+    // Convert two bytes to a 16-bit integer
+    int LatitudinalDirection = (static_cast<int>(static_cast<unsigned char>(byte_chars9[0])) << 8) |
+        static_cast<int>(static_cast<unsigned char>(byte_chars9[1]));
+
+    // Convert value to degrees (dividing by 1000)
+    double LatitudinalDirectionDegrees = static_cast<double>(LatitudinalDirection) / 1000.0;
+
+    // Add result to the buffer
+    outputBuffer << "Latitudinal Direction Increment: " << LatitudinalDirectionDegrees << " degrees\n";
+
+    // Read scanning mode flags
+    grib.seekg(start_section_2 + 27);  // Octet 28 (0-based index is 27)
+    char scanning_mode_flags;
+    grib.read(&scanning_mode_flags, 1);
+
+    bool scan_i_direction = (scanning_mode_flags & 0b00000001) != 0;
+    bool scan_j_direction = (scanning_mode_flags & 0b00000010) != 0;
+    bool adj_points_i_direction = (scanning_mode_flags & 0b00000100) != 0;
+    bool adj_points_j_direction = (scanning_mode_flags & 0b00001000) != 0;
+
+    outputBuffer << "Scanning mode flags: Points scan in "
+        << (scan_i_direction ? "-i" : "+i")
+        << " and "
+        << (scan_j_direction ? "+j" : "-j")
+        << " direction: (FORTRAN: ("
+        << (adj_points_i_direction ? "J,I" : "I,J")
+        << "))\n";
+
+    // Read the number of points in each row
+    int num_rows = 73;  // Based on the provided example
+    grib.seekg(start_section_2 + 32);  // Octet 33 (0-based index is 32)
+    vector<int> row_points(num_rows);
+
+    for (int i = 0; i < num_rows; ++i) {
+        char bytes[2];
+        grib.read(bytes, 2);
+        row_points[i] = (static_cast<int>(static_cast<unsigned char>(bytes[0])) << 8) |
+            static_cast<int>(static_cast<unsigned char>(bytes[1]));
+    }
+
+    for (int i = 0; i < num_rows; ++i) {
+        outputBuffer << "Row " << (i + 1) << " Points: " << row_points[i] << "\n";
+    }
 
     outputFile << "==========================\n";
     outputFile << "== Section 2 Data ==\n";
@@ -420,7 +477,7 @@ int main()
         grib.read(reinterpret_cast<char*>(&byte), 1);
         section_3_length |= (static_cast<uint32_t>(byte) << (8 * (2 - i)));
     }
-    outputBuffer << "Dlugosc sekcji 3 : " << section_3_length << "\n";
+    outputBuffer << "Section 3 length: " << section_3_length << "\n";
 
     grib.read(&byte_char, 1);
     int Flag_to_decode = int(byte_char);
